@@ -1,4 +1,4 @@
-import { BadRequestException, PipeTransform } from '@nestjs/common';
+import { BadRequestException, NotFoundException, PipeTransform } from '@nestjs/common';
 import { TaskStatus } from '../tasks.status.enum';
 
 export class TaskStatusvalidationPipe implements PipeTransform {
@@ -9,6 +9,9 @@ export class TaskStatusvalidationPipe implements PipeTransform {
   ];
 
   transform(value: any) {
+    if (!value) {
+      throw new NotFoundException('Wrong route');
+    }
     value = value.toUpperCase();
     if (!this.isStatusvalid(value)) {
       throw new BadRequestException(`${value} is an invalid status`);
